@@ -1,13 +1,3 @@
-FROM golang:1.8
-
-WORKDIR /go/src/app
-COPY /server .
-
-RUN go get -d -u github.com/gorilla/mux
-RUN go get -d -u go.mongodb.org/mongo-driver/mongo
-
-COPY /server/main.go .
-
 # base image
 FROM node:12.2.0-alpine
 
@@ -22,6 +12,8 @@ ENV PATH /client/node_modules/.bin:$PATH
 COPY client/package.json ./
 RUN npm install --silent
 
-# start app
+# build app
+CMD ["npm", "run", "build"]
+
 EXPOSE 3000
 CMD ["npm", "start"]
