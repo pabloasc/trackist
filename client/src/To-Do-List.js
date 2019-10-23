@@ -52,7 +52,6 @@ class ToDoList extends Component {
 
   getTask = () => {
     axios.get(endpoint + "/api/task").then(res => {
-      console.log(res);
       if (res.data) {
         this.setState({
           items: res.data.map(item => {

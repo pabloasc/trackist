@@ -12,8 +12,8 @@ ENV PATH /client/node_modules/.bin:$PATH
 COPY client/package.json ./
 RUN npm install --silent
 
-# build app
-CMD ["npm", "run", "build"]
+# build and run app
+RUN npm run build
 
 EXPOSE 3000
 CMD ["npm", "start"]
