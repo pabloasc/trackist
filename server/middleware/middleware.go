@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -17,12 +18,21 @@ import (
 )
 
 // DB connection string
-// const connectionString = "Connection String"
-// const connectionString = "mongodb://localhost:27017"
-const connectionString = "mongodb://mongo:27017";
+// const connectionString = ;
+var connectionString = getEnv("MONGO_CONNECTION", "mongodb://mongo:27017")
+// getEnv get key environment variable if exist otherwise return defalutValue
+func getEnv(key, defaultValue string) string {
+    value := os.Getenv(key)
+		fmt.Println("dm", value)
+    if len(value) == 0 {
+        return defaultValue
+    }
+    return value
+}
 
 // Database Name
-const dbName = "test"
+// const dbName = "test"
+const dbName = "trackist"
 
 // Collection name
 const collName = "todolist"

@@ -1,32 +1,20 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
 
 let endpoint = "http://localhost:8080";
 
-class ToDoList extends Component {
-  constructor(props) {
-    super(props);
+export default function ToDoList(props)  {
+  const [task, setTask] = useState("");
+  const [items, setItems] = useState([]);
 
-    this.state = {
-      task: "",
-      items: []
-    };
+  function handleTaskChange(e) {
+    setTask(e.target.value);
   }
 
-  componentDidMount() {
-    this.getTask();
-  }
+  getTasks();
 
-  onChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-
-  onSubmit = () => {
-    let { task } = this.state;
-    // console.log("pRINTING task", this.state.task);
+  function onSubmit() {
     if (task) {
       axios
         .post(
@@ -41,20 +29,17 @@ class ToDoList extends Component {
           }
         )
         .then(res => {
-          this.getTask();
-          this.setState({
-            task: ""
-          });
-          console.log(res);
+          getTasks();
+          setTask('')
         });
     }
-  };
+  }
 
-  getTask = () => {
+  function getTasks() {
     axios.get(endpoint + "/api/task").then(res => {
       if (res.data) {
-        this.setState({
-          items: res.data.map(item => {
+        setItems(
+          res.data.map(item => {
             let color = "yellow";
 
             if (item.status) {
@@ -71,19 +56,19 @@ class ToDoList extends Component {
                     <Icon
                       name="check circle"
                       color="green"
-                      onClick={() => this.updateTask(item._id)}
+                      onClick={() => updateTask(item._id)}
                     />
                     <span style={{ paddingRight: 10 }}>Done</span>
                     <Icon
                       name="undo"
                       color="yellow"
-                      onClick={() => this.undoTask(item._id)}
+                      onClick={() => undoTask(item._id)}
                     />
                     <span style={{ paddingRight: 10 }}>Undo</span>
                     <Icon
                       name="delete"
                       color="red"
-                      onClick={() => this.deleteTask(item._id)}
+                      onClick={() => deleteTask(item._id)}
                     />
                     <span style={{ paddingRight: 10 }}>Delete</span>
                   </Card.Meta>
@@ -91,16 +76,14 @@ class ToDoList extends Component {
               </Card>
             );
           })
-        });
+        )
       } else {
-        this.setState({
-          items: []
-        });
+        setItems([]);
       }
     });
-  };
+  }
 
-  updateTask = id => {
+  function updateTask(id) {
     axios
       .put(endpoint + "/api/task/" + id, {
         headers: {
@@ -108,12 +91,11 @@ class ToDoList extends Component {
         }
       })
       .then(res => {
-        console.log(res);
-        this.getTask();
+        getTasks();
       });
-  };
+  }
 
-  undoTask = id => {
+  function undoTask(id) {
     axios
       .put(endpoint + "/api/undoTask/" + id, {
         headers: {
@@ -121,12 +103,11 @@ class ToDoList extends Component {
         }
       })
       .then(res => {
-        console.log(res);
-        this.getTask();
+        getTasks();
       });
-  };
+  }
 
-  deleteTask = id => {
+  function deleteTask(id) {
     axios
       .delete(endpoint + "/api/deleteTask/" + id, {
         headers: {
@@ -134,37 +115,34 @@ class ToDoList extends Component {
         }
       })
       .then(res => {
-        console.log(res);
-        this.getTask();
+        getTasks();
       });
-  };
-  render() {
-    return (
-      <div>
-        <div className="row">
-          <Header className="header" as="h2">
-            TO DO LIST
-          </Header>
-        </div>
-        <div className="row">
-          <Form onSubmit={this.onSubmit}>
-            <Input
-              type="text"
-              name="task"
-              onChange={this.onChange}
-              value={this.state.task}
-              fluid
-              placeholder="Create Task"
-            />
-            {/* <Button >Create Task</Button> */}
-          </Form>
-        </div>
-        <div className="row">
-          <Card.Group>{this.state.items}</Card.Group>
-        </div>
-      </div>
-    );
   }
-}
 
-export default ToDoList;
+  return (
+    <div>
+      <div className="row">
+        <Header className="header" as="h2">
+          Trackist.io
+        </Header>
+      </div>
+      <div className="row">
+        <Form onSubmit={onSubmit}>
+          <Input
+            type="text"
+            name="task"
+            value={task}
+            fluid
+            onChange={handleTaskChange}
+            placeholder="Create Task"
+          />
+          {/* <Button >Create Task</Button> */}
+        </Form>
+      </div>
+      <div className="row">
+        <Card.Group>{items}</Card.Group>
+      </div>
+    </div>
+  );
+
+}

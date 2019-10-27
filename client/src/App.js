@@ -3,7 +3,7 @@ import "./App.css";
 import { Container } from "semantic-ui-react";
 import ToDoList from "./To-Do-List";
 
-function App() {
+export default function App() {
   return (
     <div>
       <Container>
@@ -12,5 +12,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
