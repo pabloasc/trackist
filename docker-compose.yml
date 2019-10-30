@@ -4,19 +4,19 @@ services:
     image: mongo
     ports:
       - "27017:27017"
-#  web:
-#    build:
-#      context: .
-#      dockerfile: client/Dockerfile
-#    ports:
-#      - "3000:3000"
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: client/Dockerfile-compose
+  #   ports:
+  #     - "3000:3000"
   go:
     build:
       context: .
-      dockerfile: server/Dockerfile
+      dockerfile: server/Dockerfile-compose
     ports:
       - "8080:8080"
-    environment:
-      MONGO_CONNECTION: ${MONGO_CONNECTION}
+    # environment:
+    #   MONGO_CONNECTION: ${MONGO_CONNECTION}
     depends_on:
       - mongo

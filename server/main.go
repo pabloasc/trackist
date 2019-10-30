@@ -4,15 +4,22 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
-	"./router"
+	"app/router"
 )
 
 func main() {
 	r := router.Router()
 	// fs := http.FileServer(http.Dir("build"))
 	// http.Handle("/", fs)
-	fmt.Println("Starting server on the port 8080...")
+	port := os.Getenv("PORT") // Heroku provides the port to bind to
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	if port == "" {
+		port = "8080"
+	}
+
+	fmt.Println("Starting server on the port" + port);
+
+	log.Fatal(http.ListenAndServe(":" + port, r))
 }

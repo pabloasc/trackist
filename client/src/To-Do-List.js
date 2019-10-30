@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
 
-let endpoint = "http://localhost:8080";
+// let endpoint = "http://localhost:8080";
+let endpoint = "https://nameless-shelf-29251.herokuapp.com";
 
 export default function ToDoList(props)  {
   const [task, setTask] = useState("");
   const [items, setItems] = useState([]);
 
+  useEffect(getTasks, []); // Pass empty array to only run once on mount.
+
   function handleTaskChange(e) {
     setTask(e.target.value);
   }
-
-  getTasks();
 
   function onSubmit() {
     if (task) {

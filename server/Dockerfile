@@ -1,20 +1,18 @@
-FROM golang:1.12
+FROM golang:1.12 AS build-env
 
 WORKDIR /go/src/app
-COPY /server .
+COPY / .
 
 RUN go get -d -u github.com/gorilla/mux
 RUN go get -d -u go.mongodb.org/mongo-driver/mongo
 
-COPY /server/main.go .
+RUN cd /go/src/app && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/src/app/build
 
-EXPOSE 8080
+# EXPOSE 8080
+# CMD ["go run /go/src/app/main.go"]
 
-# Add wait-for-it
-COPY /server/wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
-
-ENTRYPOINT [ "/bin/bash", "-c" ]
-CMD ["/wait-for-it.sh mongo:27017"]
-CMD ["--"]
-CMD ["go run /go/src/app/main.go"]
+# final stage
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+COPY --from=build-env /go/src/app/build /build
+CMD ["./build"]
