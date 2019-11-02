@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./App.scss";
 import { Container } from "semantic-ui-react";
 import ToDoList from "./To-Do-List";
 
