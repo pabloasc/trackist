@@ -1,13 +1,24 @@
-body {
-  width: 800px;
-  margin: 0 auto;
-  margin-top: 50px;
+// Colors
+$bg-color: #FFFFFF;
+$dot-color: #CCCCCC;
 
-  font-family: "Open Sans", sans-serif;
+// Dot Dimensions
+$dot-size: 2px;
+$dot-space: 22px;
+
+body {
+  background: linear-gradient(90deg, $bg-color ($dot-space - $dot-size), transparent 1%) center, linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center, $dot-color;
+  background-size: $dot-space $dot-space;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.header {
-  text-align: center;
+.ui {
+  .header {
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+  }
 }
 
 .row {

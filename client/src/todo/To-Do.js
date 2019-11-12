@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './todo.scss';
+import { ToDoJSX } from './To-Do.jsx';
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
 
 // let endpoint = "http://localhost:8080";
@@ -47,34 +49,7 @@ export default function ToDoList(props)  {
               color = "green";
             }
             return (
-              <Card key={item._id} color={color} fluid>
-                <Card.Content>
-                  <Card.Header textAlign="left">
-                    <div style={{ wordWrap: "break-word" }}>{item.task}</div>
-                  </Card.Header>
-
-                  <Card.Meta textAlign="right">
-                    <Icon
-                      name="check circle"
-                      color="green"
-                      onClick={() => updateTask(item._id)}
-                    />
-                    <span style={{ paddingRight: 10 }}>Done</span>
-                    <Icon
-                      name="undo"
-                      color="yellow"
-                      onClick={() => undoTask(item._id)}
-                    />
-                    <span style={{ paddingRight: 10 }}>Undo</span>
-                    <Icon
-                      name="delete"
-                      color="red"
-                      onClick={() => deleteTask(item._id)}
-                    />
-                    <span style={{ paddingRight: 10 }}>Delete</span>
-                  </Card.Meta>
-                </Card.Content>
-              </Card>
+              <ToDoJSX color={color} item={item} toggleDone={toggleDone} deleteTask={deleteTask}/>
             );
           })
         )
@@ -82,6 +57,16 @@ export default function ToDoList(props)  {
         setItems([]);
       }
     });
+  }
+
+  function toggleDone(item) {
+    if (item.status) {
+      undoTask(item._id);
+      console.log('undo');
+    } else {
+      updateTask(item._id);
+      console.log('do');
+    }
   }
 
   function updateTask(id) {
@@ -129,15 +114,14 @@ export default function ToDoList(props)  {
       </div>
       <div className="row">
         <Form onSubmit={onSubmit}>
-          <Input
+          <input
             type="text"
+            className="input"
             name="task"
             value={task}
-            fluid
             onChange={handleTaskChange}
             placeholder="Create Task"
           />
-          {/* <Button >Create Task</Button> */}
         </Form>
       </div>
       <div className="row">

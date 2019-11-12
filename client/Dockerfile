@@ -12,6 +12,8 @@ ENV PATH /node_modules/.bin:$PATH
 COPY package.json .
 RUN npm install --silent
 
+RUN npm rebuild node-sass
+
 # build and run app
 RUN npm run build
 

@@ -1,0 +1,30 @@
+.header {
+  margin-top: 28px;
+  font-size: 22px;
+}
+
+.ui {
+  .cards {
+    .task {
+      margin: 0 auto;
+      width: 350px;
+      * {
+        padding: 5px;
+      }
+      .content {
+        font-size: 12px;
+        &:hover {
+          .task__icon-delete {
+            visibility: visible;
+          }
+        }
+      }
+      .completed-task {
+        text-decoration: line-through;
+      }
+      &__icon-delete {
+        visibility: hidden;
+      }
+    }
+  }
+}
