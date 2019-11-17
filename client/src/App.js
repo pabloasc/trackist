@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.scss";
 import { Container } from "semantic-ui-react";
+import Header from "./Header";
 import ToDoList from "./todo/To-Do";
 
-export default function App() {
+import { AuthProvider } from './Auth';
+
+const App = () => {
   return (
-    <div>
-      <Container>
-        <ToDoList />
-      </Container>
-    </div>
+    <AuthProvider>
+      <div>
+        <Header />
+
+        <Container>
+          <ToDoList />
+        </Container>
+
+      </div>
+    </AuthProvider>
   );
-}
+};
+
+export default App;

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"app/router"
+	"./router"
 )
 
 func main() {

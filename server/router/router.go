@@ -1,7 +1,7 @@
 package router
 
 import (
-	"app/middleware"
+	"../middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -11,6 +11,7 @@ func Router() *mux.Router {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/api/task", middleware.GetAllTask).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/task/{uid}", middleware.GetUserTasks).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/task", middleware.CreateTask).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/task/{id}", middleware.TaskComplete).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/api/undoTask/{id}", middleware.UndoTask).Methods("PUT", "OPTIONS")

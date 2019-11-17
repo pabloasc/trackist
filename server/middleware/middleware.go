@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"app/models"
+	"../models"
 	"github.com/gorilla/mux"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,8 +19,8 @@ import (
 
 // DB connection string
 // const connectionString = ;
-var connectionString = getEnv("MONGO_CONNECTION", "mongodb://mongo:27017")
 // getEnv get key environment variable if exist otherwise return defalutValue
+var connectionString = getEnv("MONGO_CONNECTION", "mongodb://localhost:27017")
 func getEnv(key, defaultValue string) string {
     value := os.Getenv(key)
 		fmt.Println("dm", value)
@@ -72,6 +72,17 @@ func GetAllTask(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	payload := getAllTask()
+	fmt.Println("asdads")
+	json.NewEncoder(w).Encode(payload)
+}
+
+// GetUserTasks get all the task from the current user route
+func GetUserTasks(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	params := mux.Vars(r)
+	payload := getUserTask(params["uid"])
+	fmt.Println(params["uid"])
 	json.NewEncoder(w).Encode(payload)
 }
 
@@ -139,7 +150,34 @@ func DeleteAllTask(w http.ResponseWriter, r *http.Request) {
 
 // get all task from the DB and return it
 func getAllTask() []primitive.M {
-	cur, err := collection.Find(context.Background(), bson.D{{}})
+	cur, err := collection.Find(context.Background(), bson.D{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var results []primitive.M
+	for cur.Next(context.Background()) {
+		var result bson.M
+		e := cur.Decode(&result)
+		if e != nil {
+			log.Fatal(e)
+		}
+		// fmt.Println("cur..>", cur, "result", reflect.TypeOf(result), reflect.TypeOf(result["_id"]))
+		results = append(results, result)
+
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	cur.Close(context.Background())
+	return results
+}
+
+// get all task from the DB and return it
+func getUserTask(uid string) []primitive.M {
+	cur, err := collection.Find(context.Background(), bson.M{"user": uid})
 	if err != nil {
 		log.Fatal(err)
 	}
